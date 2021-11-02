@@ -8,8 +8,19 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getData(): Observable<any> {
+  getCows(): Observable<any> {
     return this.httpClient.get(`${environment.baseUrl}`);
   }
 
+  deleteCow(id: number): Observable<any> {
+    return this.httpClient.delete(`${environment.baseUrl}/delete/${id}`);
+  }
+
+  newCow(cow: any): Observable<any> {
+    return this.httpClient.post(`${environment.baseUrl}/add/`, cow);
+  }
+
+  updateCow(cow: any): Observable<any> {
+    return this.httpClient.put(`${environment.baseUrl}/update/`, cow);
+  }
 }

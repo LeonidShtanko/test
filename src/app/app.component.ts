@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ApiService} from "./api.service";
-import {FormControl, FormGroup} from "@angular/forms";
-
+import {take} from 'rxjs/operators';
+import {FormControl, FormGroup} from '@angular/forms';
 
 
 @Component({
@@ -11,30 +11,43 @@ import {FormControl, FormGroup} from "@angular/forms";
 })
 export class AppComponent {
   tableData: any;
-  displayColumns = ["cowId", "healthIndex", "animalId", "lactationNumber", "ageInDays", "edit"];
   // dataSchema = {
   //   "cowId": "number",
   //   "healthIndex": "number",
-  //   "animalId": "text",
+  //   "animalId": "string",
   //   "lactationNumber": "number",
   //   "ageInDays": "number"
   // }
-  // isReadOnly = {
-  //   "cowId": true
-  // }
 
   form = new FormGroup({
-    cowId: new FormControl(),
     healthIndex: new FormControl(),
     animalId: new FormControl(),
     lactationNumber: new FormControl(),
     ageInDays: new FormControl(),
-    edit: new FormControl(),
   });
 
   constructor(
     private apiService: ApiService,
   ) {
-    this.apiService.getData().subscribe(res => this.tableData = res.result);
+    this.apiService.getCows().pipe(take(1)).subscribe(res => this.tableData = res);
+  }
+
+  deleteRow(id: number) {
+    this.apiService.deleteCow(id).pipe(take(1)).subscribe(res => this.tableData = res);
+  }
+
+  addCow() {
+    this.apiService.newCow(this.form.value).pipe(take(1)).subscribe(res => this.tableData = res);
+  }
+
+  saveEdited(cowId: number, healthIndex: number, animalId: string, lactationNumber: number, ageInDays: number) {
+    const cow = {
+      cowId: cowId,
+      healthIndex: healthIndex,
+      animalId: animalId,
+      lactationNumber: lactationNumber,
+      ageInDays: ageInDays
+    }
+    this.apiService.updateCow(cow).pipe(take(1)).subscribe(res => this.tableData = res);
   }
 }
