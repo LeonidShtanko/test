@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ApiService} from "./api.service";
-import {take} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {FormControl, FormGroup} from '@angular/forms';
+import {Subject} from 'rxjs';
 
 
 @Component({
@@ -9,15 +10,8 @@ import {FormControl, FormGroup} from '@angular/forms';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy{
   tableData: any;
-  // dataSchema = {
-  //   "cowId": "number",
-  //   "healthIndex": "number",
-  //   "animalId": "string",
-  //   "lactationNumber": "number",
-  //   "ageInDays": "number"
-  // }
 
   form = new FormGroup({
     healthIndex: new FormControl(),
@@ -26,18 +20,26 @@ export class AppComponent {
     ageInDays: new FormControl(),
   });
 
+  private unsubscribe: Subject<any>;
+
   constructor(
     private apiService: ApiService,
   ) {
-    this.apiService.getCows().pipe(take(1)).subscribe(res => this.tableData = res);
+    this.unsubscribe = new Subject();
+    this.apiService.getCows().pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   deleteRow(id: number) {
-    this.apiService.deleteCow(id).pipe(take(1)).subscribe(res => this.tableData = res);
+    this.apiService.deleteCow(id).pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res);
   }
 
   addCow() {
-    this.apiService.newCow(this.form.value).pipe(take(1)).subscribe(res => this.tableData = res);
+    this.apiService.newCow(this.form.value).pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res);
   }
 
   saveEdited(cowId: number, healthIndex: number, animalId: string, lactationNumber: number, ageInDays: number) {
@@ -48,6 +50,6 @@ export class AppComponent {
       lactationNumber: lactationNumber,
       ageInDays: ageInDays
     }
-    this.apiService.updateCow(cow).pipe(take(1)).subscribe(res => this.tableData = res);
+    this.apiService.updateCow(cow).pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res);
   }
 }
