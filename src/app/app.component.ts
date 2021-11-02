@@ -10,7 +10,7 @@ import {Subject} from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnDestroy{
+export class AppComponent implements OnDestroy {
   tableData: any;
 
   form = new FormGroup({
@@ -26,7 +26,7 @@ export class AppComponent implements OnDestroy{
     private apiService: ApiService,
   ) {
     this.unsubscribe = new Subject();
-    this.apiService.getCows().pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res);
+    this.apiService.getCows().pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res)
   }
 
   ngOnDestroy() {
@@ -39,7 +39,10 @@ export class AppComponent implements OnDestroy{
   }
 
   addCow() {
-    this.apiService.newCow(this.form.value).pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res);
+    this.apiService.newCow(this.form.value).pipe(takeUntil(this.unsubscribe)).subscribe(res => {
+      this.tableData = res;
+      this.form.reset();
+    });
   }
 
   saveEdited(cowId: number, healthIndex: number, animalId: string, lactationNumber: number, ageInDays: number) {

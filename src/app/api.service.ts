@@ -9,7 +9,7 @@ export class ApiService {
   }
 
   getCows(): Observable<any> {
-    return this.httpClient.get(`${environment.baseUrl}`);
+    return this.httpClient.get(`${environment.baseUrl}/get`);
   }
 
   deleteCow(id: number): Observable<any> {

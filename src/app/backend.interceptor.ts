@@ -140,11 +140,11 @@ export class BackendInterceptor implements HttpInterceptor {
     if (request.method === "PUT") {
       const cow = request.body;
       const editedCowId = dataMock.find(cows => cows.cowId === cow.cowId)?.cowId;
-      // dataMock.find(cows => cows.cowId === editedCowId)?.healthIndex;
-      console.log('editedCowId', dataMock.find(cows => cows.cowId === editedCowId));
       Object.defineProperties(dataMock.find(cows => cows.cowId === editedCowId), {
         'healthIndex': {value: cow.healthIndex},
+        'animalId': {value: cow.animalId},
       });
+      console.log('you edited cow', dataMock.find(cows => cows.cowId === editedCowId));
       console.log('dataMock PUT', dataMock);
       return of(new HttpResponse({status: 200, body: dataMock}));
     }
