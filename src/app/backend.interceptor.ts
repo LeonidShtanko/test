@@ -143,8 +143,9 @@ export class BackendInterceptor implements HttpInterceptor {
       Object.defineProperties(dataMock.find(cows => cows.cowId === editedCowId), {
         'healthIndex': {value: cow.healthIndex},
         'animalId': {value: cow.animalId},
+        'lactationNumber': {value: cow.lactationNumber},
+        'ageInDays': {value: cow.ageInDays},
       });
-      console.log('you edited cow', dataMock.find(cows => cows.cowId === editedCowId));
       console.log('dataMock PUT', dataMock);
       return of(new HttpResponse({status: 200, body: dataMock}));
     }

@@ -47,12 +47,13 @@ export class AppComponent implements OnDestroy {
 
   saveEdited(cowId: number, healthIndex: number, animalId: string, lactationNumber: number, ageInDays: number) {
     const cow = {
-      cowId: cowId,
-      healthIndex: healthIndex,
+      cowId: +cowId,
+      healthIndex: +healthIndex,
       animalId: animalId,
-      lactationNumber: lactationNumber,
-      ageInDays: ageInDays
+      lactationNumber: +lactationNumber,
+      ageInDays: +ageInDays
     }
+    console.log('editedCow', cow)
     this.apiService.updateCow(cow).pipe(takeUntil(this.unsubscribe)).subscribe(res => this.tableData = res);
   }
 }

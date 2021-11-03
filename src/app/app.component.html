@@ -10,15 +10,15 @@
   <tr *ngFor="let row of tableData">
     <td>{{row?.cowId}}</td>
     <td>
-      <input *ngIf="row?.healthIndex" [value]="row?.healthIndex">
+      <input *ngIf="row?.healthIndex" [(ngModel)]="row.healthIndex">
     </td>
     <td>
-      <input *ngIf="row?.animalId" [value]="row?.animalId">
+      <input *ngIf="row?.animalId" [(ngModel)]="row.animalId">
     </td>
     <td>
-      <input *ngIf="row?.lactationNumber" [value]="row?.lactationNumber">
+      <input *ngIf="row?.lactationNumber" [(ngModel)]="row.lactationNumber">
     <td>
-      <input *ngIf="row?.ageInDays" [value]="row?.ageInDays">
+      <input *ngIf="row?.ageInDays" [(ngModel)]="row.ageInDays">
     <td>
       <button type="button"
               (click)="saveEdited(row?.cowId, row?.healthIndex, row?.animalId, row?.lactationNumber, row?.ageInDays)">
